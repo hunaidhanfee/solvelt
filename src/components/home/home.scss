@@ -1,0 +1,40 @@
+.container-div {
+    width: 100%;
+
+    .header-image {
+        width: 100%;
+    }
+
+    .question-item {
+        margin-right: 20%;
+        
+        .question-title {
+            margin-bottom: 0.2rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #5692e0;
+        }
+
+        .question-info {
+           color: #bcb7b6;
+        }
+    }
+
+    .answer-count-container {
+        background-color: #d9d7d6;
+        border-radius: 0.2rem;
+
+        .answer-count {
+            text-align: center;
+            padding: 0.5rem;
+            color: #8c8a8a;
+
+            .answer-number {
+                font-size: 1.4rem;
+                font-weight: 600;
+            }
+        }
+    }
+
+
+}
