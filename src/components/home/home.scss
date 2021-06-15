@@ -24,8 +24,14 @@
         width: 100%;
     }
 
+    .question-info-container {
+        cursor: pointer;
+    }
+
     .question-item {
         margin-right: 20%;
+        max-width: 40rem;
+        width: 40rem;
         
         .question-title {
             margin-bottom: 0.2rem;

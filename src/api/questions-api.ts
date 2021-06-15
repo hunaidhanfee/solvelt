@@ -35,3 +35,19 @@ let questions: IQuestion[] = [
  export const getQuestionAsync = async (questionId: string) => {
     return questions.find((question: IQuestion) => question.questionId === questionId);
 }
+
+/**
+ * Gets the questions.
+ * @returns Questions.
+ */
+ export const getQuestionsAsync = async () => {
+    return questions;
+}
+
+/**
+ * Add a questions.
+ * @param questionId Question Id of question to get.
+ */
+ export const addQuestionAsync = async (questionDetail: IQuestion) => {
+    questions.push(questionDetail);
+}

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Tabs, Tab } from "@material-ui/core";
+import { Tabs, Tab, Slide } from "@material-ui/core";
 import { Text } from "@fluentui/react-northstar";
 import { Stack, IStackTokens } from "@fluentui/react";
 import { IQuestion } from "../../models/question";
@@ -7,6 +7,7 @@ import CustomizeDialog from "../common/customize-dialog/customize-dialog"
 import AskAQuestion from "../ask-a-question/ask-a-question"
 import NavBar from "../common/nav-bar/nav-bar"
 import Divider from "../common/divider/divider";
+import { getQuestionsAsync}  from "../../api/questions-api";
 
 import "./home.scss";
 
@@ -29,16 +30,20 @@ class Home extends React.Component<IHomeProps, IHomeState> {
         super(props);
         this.state = {
             questionActivityState: 0,            
-            questionsList: [
-                {
-                    questionDescription: "Desc",
-                    questionId: "1",
-                    questionTitle: "Testing Title",
-                    userId: "UA"
-                }
-            ],
+            questionsList: [],
             isAskAQuestionDialogOpen: false,
         }   
+    }
+
+    componentDidMount() {
+        this.getQuestionsAsync();
+    }
+
+    getQuestionsAsync = async () => {
+        let response = await getQuestionsAsync();
+        this.setState({
+            questionsList: response,
+        })
     }
 
     /**
@@ -95,16 +100,20 @@ class Home extends React.Component<IHomeProps, IHomeState> {
         console.log(value);
     }
 
+    onQuestionItemClick = (questionId: string) => {
+        window.open(`/question/${questionId}`, "_self");
+    }
+
     /**
      * Renders the questions list.
      */
     renderQuestionList = () => {
         return this.state.questionsList.map((question: IQuestion, index: number) => 
-            <div>
-                <Stack horizontal tokens={horizontalGapStackTokens} verticalAlign="center">
+            <div >
+                <Stack horizontal tokens={horizontalGapStackTokens} verticalAlign="center" className="question-info-container" onClick={() => this.onQuestionItemClick(question.questionId)}>
                     <Stack className="question-item">
                         <Text className="question-title" content={question.questionTitle} />
-                        <Text className="question-info" content={question.questionDescription}/>
+                        <span className="question-info" dangerouslySetInnerHTML={{__html: question.questionDescription}}></span>
                     </Stack>
 
                     <Stack horizontalAlign="end" className="answer-count-container">
@@ -130,7 +139,7 @@ class Home extends React.Component<IHomeProps, IHomeState> {
             </Stack>
         </Stack>
     }
-
+    
     /** Renders component */
     render() {
         return (
@@ -139,12 +148,11 @@ class Home extends React.Component<IHomeProps, IHomeState> {
                 <NavBar/>
                 {this.renderTabContainer()}
                 {this.renderQuestionList()}
-                <CustomizeDialog 
+                <AskAQuestion 
                     isOpen={this.state.isAskAQuestionDialogOpen} 
                     onClose={this.onAskAQuestionClick} 
-                    onSubmit={this.onAskAQuestionClick} 
-                    content={<AskAQuestion onChange={this.onQuestionTextAreaChange}/>}
-                />
+                    onSubmit={this.onAskAQuestionClick}
+                /> 
             </div>
         );
     }

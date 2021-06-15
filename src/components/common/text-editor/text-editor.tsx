@@ -7,38 +7,18 @@ import 'react-quill/dist/quill.snow.css';
 interface ITextEditorProps {
     handleChange: (content: string) => void;
     placeholder: string;
+    formats: Array<any>;
+    modules: any;
+    value?: string;
+    bound: string;
 }
 
 /** Renders navigation bar */
 const TextEditor: React.FC<ITextEditorProps> = props => {
-    const [value, setValue] = React.useState<string>("");
+    const [value, setValue] = React.useState<string>(props.value === undefined ? "" : props.value);
     const [content, setContent] = React.useState<string>("");
 
-    const modules = {
-        formula: true,
-        toolbar: [
-          [{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
-          [{size: []}],
-          ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-          [{'list': 'ordered'}, {'list': 'bullet'}, 
-           {'indent': '-1'}, {'indent': '+1'}],
-          ['link', 'image', 'video'],
-          ['clean'],
-          ['formula'],
-          [{ 'color': [] }],
-        ],
-        clipboard: {
-          // toggle to add extra line breaks when pasting HTML:
-          matchVisual: false,
-        }
-    }
-
-    const formats = [
-        'header', 'font', 'size',
-        'bold', 'italic', 'underline', 'strike', 'blockquote','color',
-        'list', 'bullet', 'indent',
-        'link', 'image', 'video','formula'
-    ]
+    
     const cc = (a: string) => {
         setValue(a);
         props.handleChange(a);
@@ -46,15 +26,14 @@ const TextEditor: React.FC<ITextEditorProps> = props => {
 
     const getTextEditor = () => {
 
-        return <div style={{height: "10rem", marginBottom: "5rem"}} id="hunaid"><ReactQuill 
+        return <div style={{height: "10rem", marginBottom: "5rem", maxWidth: 949}} id={props.bound}><ReactQuill 
         theme={"snow"}
         onChange={cc}
         value={value}
-        modules={modules}
-        formats={formats}
-        placeholder={"Something"}
-        bounds={document.getElementById("hunaid")!}
-        style={{height: "10rem"}}
+        modules={props.modules}
+        formats={props.formats}
+        placeholder={props.placeholder}
+        style={{height: "10rem", maxWidth: 949}}
        /></div>
     }
     

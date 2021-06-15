@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from "@material-ui/core";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Slide } from "@material-ui/core";
 import "./customize-dialog.scss"
 
 interface ICustomizeDialogProps {
@@ -11,8 +11,9 @@ interface ICustomizeDialogProps {
 
 /** Renders customize dialog according to given props.*/
 const CustomizeDialog: React.FC<ICustomizeDialogProps> = props => {
+
   const renderDialog = () => {
-      return <Dialog onClose={() => {}} open={props.isOpen} maxWidth="lg">
+      return <Dialog onClose={() => {}} open={props.isOpen} maxWidth="lg" disableBackdropClick={false}>
       <DialogTitle className="customized-dialog-title">
         <span style={{fontWeight: 700, color: "#333333"}}>
           Ask a question
