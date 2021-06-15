@@ -13,14 +13,19 @@ import StarBorderTwoToneIcon from '@material-ui/icons/StarBorderTwoTone';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
 import AskAQuestion from "../ask-a-question/ask-a-question";
 import CustomizeDialog from "../common/customize-dialog/customize-dialog";
+import TextEditor from "../common/text-editor/text-editor";
+import katex from "katex";
 
+import "katex/dist/katex.min.css";
 import "./question-page.scss"
+window.katex = katex;
 
 interface IQuestionPageState {
     questionActivityState: string;
     questionDetail: IQuestion;
     answersDetails: IAnswer[];
     isAskAQuestionDialogOpen: boolean;
+    answerToSubmit: string;
 }
 
 interface IQuestionPageProps extends RouteComponentProps {
@@ -46,6 +51,7 @@ class QuestionPage extends React.Component<IQuestionPageProps, IQuestionPageStat
             },
             answersDetails: [],
             isAskAQuestionDialogOpen: false,
+            answerToSubmit: "<p></p>"
         }
     }
 
@@ -84,6 +90,16 @@ class QuestionPage extends React.Component<IQuestionPageProps, IQuestionPageStat
     }
 
     /**
+     * Handle when user wrtie answer.
+     * @param content Content from text editor.
+     */
+    handleTextEditorChange = (content: string) => {
+        this.setState({
+            answerToSubmit: content,
+        })
+    }
+
+    /**
      * Gets the question content.
      */
     getQuestionContent = () => {
@@ -105,9 +121,10 @@ class QuestionPage extends React.Component<IQuestionPageProps, IQuestionPageStat
             })}
             <Divider width="75%" height="0.08rem" marginTop="1rem" marginBottom="1rem"/>
             <Text content="New answers should provide a new explanation. Otherwise, edit an answer above." className="answer-note"/>
-            <div className="answer-input">
+            {/* <div className="answer-input">
                 <Text content="Add an answer" className="answer-placeholder"/>
-            </div>
+            </div> */}            
+            <TextEditor handleChange={this.handleTextEditorChange} placeholder="Write your answer"/>
         </Stack>
     }
 
@@ -175,16 +192,30 @@ class QuestionPage extends React.Component<IQuestionPageProps, IQuestionPageStat
 
     /** Renders component */
     render() {
+        
         return (
             <div className="question-page-container">
-                {this.getQuestionPageHeader()}
-                {this.getQuestionContainer()}
+                
+                
+                
+                <div>
+                    {this.getQuestionPageHeader()}
+                </div>
+                <div>
+                    {this.getQuestionContainer()}
+                </div>
                 <CustomizeDialog
                     isOpen={this.state.isAskAQuestionDialogOpen} 
                     onClose={this.onAskAQuestionClick} 
                     onSubmit={this.onAskAQuestionClick} 
                     content={<AskAQuestion onChange={this.onQuestionTextAreaChange}/>}
                 />
+                <div>
+                    HUnaid
+                </div>
+                <div dangerouslySetInnerHTML={{ __html: this.state.answerToSubmit }}>
+                    
+                </div>
             </div>
         );
     }
