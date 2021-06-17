@@ -52,7 +52,8 @@ const AskAQuestion: React.FC<IAskAQuestionProps> = props => {
                 questionDescription: questionDescription,
                 questionId: Guid.create().toString(),
                 questionTitle: questionTitle,
-                userId: Guid.create().toString()
+                userId: Guid.create().toString(),
+                subjectId: "phy"
             }
             await addQuestionAsync(questionDetail);
             props.onSubmit();

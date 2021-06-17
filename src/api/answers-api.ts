@@ -1,4 +1,3 @@
-import { ArrowForwardIosOutlined } from "@material-ui/icons";
 import { IAnswer } from "../models/answer";
 
 let answers: IAnswer[] = [
@@ -9,14 +8,16 @@ let answers: IAnswer[] = [
         answerTitle: "React is a JavaScript library",
         answerDescription: "React is a declarative, efficient, and flexible JavaScript library for building user interfaces. It’s ‘V’ in MVC. ReactJS is an open-source, component-based front end library responsible only for the view layer of the application. It is maintained by Facebook.",
         isEditClicked: false,
+        isReplyClicked: false
     },
     {
         userId: "B",
         answerId: "2",
-        questionId: "2",
-        answerTitle: "A spoken or written representation or account of a person, object, or event.",
-        answerDescription: "Get some descripiton based on my title.",
+        questionId: "1",
+        answerTitle: "A spoken or written representation or account of a person, object, or event. Lorem ipsum se do you think",
+        answerDescription: "Get some descripiton based on my title. Get some descripitoaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaan based on my title.Get some descripiton based on my title. Get some descripiton based on my title.Get some descripiton based on my title. Get some descripiton based on my title.Get some descripiton based on my title. Get some descripiton based on my title.Get some descripiton based on my title.Get some descripiton based on my title.Get some descripiton based on my title.Get some descripiton based on my title.",
         isEditClicked: false,
+        isReplyClicked: false
     },
     {
         userId: "C",
@@ -25,6 +26,7 @@ let answers: IAnswer[] = [
         answerTitle: "This sample Title 3",
         answerDescription: "Answer description 3",
         isEditClicked: false,
+        isReplyClicked: false
     },
     {
         userId: "D",
@@ -33,6 +35,7 @@ let answers: IAnswer[] = [
         answerTitle: "This sample Title 4",
         answerDescription: "Answer description 4",
         isEditClicked: false,
+        isReplyClicked: false
     }
 ]
 

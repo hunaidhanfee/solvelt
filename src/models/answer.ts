@@ -5,4 +5,5 @@ export interface IAnswer {
     answerTitle: string;
     answerDescription: string;
     isEditClicked: boolean;
+    isReplyClicked: boolean;
 }

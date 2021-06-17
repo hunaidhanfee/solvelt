@@ -6,24 +6,30 @@ let questions: IQuestion[] = [
         questionId: "1",
         questionTitle: "What is react?",
         questionDescription: "",
+        subjectId: "phy"
     },
     {
         userId: "B",
         questionId: "2",
         questionTitle: "What is description?",
         questionDescription: "You can see I have added some question descripiton here.",
+        subjectId: "phy",
+        subSubjectId: "ph1"
     },
     {
         userId: "C",
         questionId: "3",
         questionTitle: "This sample Title 3",
         questionDescription: "Question description 3",
+        subjectId: "phy",
+        subSubjectId: "ph2"
     },
     {
         userId: "D",
         questionId: "4",
         questionTitle: "This sample Title 4",
         questionDescription: "Question description 4",
+        subjectId: "phy"
     }
 ]
 

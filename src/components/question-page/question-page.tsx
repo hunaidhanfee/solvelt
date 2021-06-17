@@ -1,6 +1,6 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom"
-import { Button } from "@material-ui/core";
+import { Button, Avatar, TextField } from "@material-ui/core";
 import { Text } from "@fluentui/react-northstar";
 import { Stack } from "@fluentui/react";
 import { IQuestion } from "../../models/question";
@@ -8,18 +8,24 @@ import { IAnswer } from "../../models/answer";
 import { RouteComponentProps } from "react-router-dom";
 import { getQuestionAsync } from "../../api/questions-api";
 import { addAnswerAsync, getAnswersAsync, updateAnswerAsync } from "../../api/answers-api";
+import { getRepliesByQuestionIdAsync } from "../../api/reply-api";
 import Divider from "../common/divider/divider";
 import EmojiObjectsTwoToneIcon from '@material-ui/icons/EmojiObjectsTwoTone';
 import StarBorderTwoToneIcon from '@material-ui/icons/StarBorderTwoTone';
+import DeleteTwoToneIcon from '@material-ui/icons/DeleteTwoTone';
 import EditTwoToneIcon from '@material-ui/icons/EditTwoTone';
+import ReplyRoundedIcon from '@material-ui/icons/ReplyRounded';
 import AskAQuestion from "../ask-a-question/ask-a-question";
 import TextEditor from "../common/text-editor/text-editor";
 import katex from "katex";
+import { Guid } from "guid-typescript";
+import EditTextArea from "../common/edit-button/edit-text-area";
+import { IReply } from "../../models/reply";
+import ReplyComp from "../common/reply-comp/reply-comp";
+import SubjectHeader from "../common/subject-header/subject-header";
 
 import "katex/dist/katex.min.css";
 import "./question-page.scss"
-import { Guid } from "guid-typescript";
-import EditButton from "../common/edit-button/edit-button";
 window.katex = katex;
 
 interface IQuestionPageState {
@@ -29,6 +35,7 @@ interface IQuestionPageState {
     isAskAQuestionDialogOpen: boolean;
     answerToSubmit: string;
     editedAnswer: string;
+    replies: IReply[];
 }
 
 interface IQuestionPageProps extends RouteComponentProps {
@@ -74,18 +81,21 @@ class QuestionPage extends React.Component<IQuestionPageProps, IQuestionPageStat
                 questionId: "",
                 questionDescription: "",
                 questionTitle: "",
-                userId: "",  
+                userId: "",
+                subjectId: ""
             },
             answersDetails: [],
             isAskAQuestionDialogOpen: false,
             answerToSubmit: "",
-            editedAnswer: ""
+            editedAnswer: "",
+            replies: []
         }
     }
 
     componentDidMount() {
         this.getQuestionAsync();
         this.getAnswersAsync();
+        this.getRepliesAsync();
     }
 
     /**
@@ -109,11 +119,22 @@ class QuestionPage extends React.Component<IQuestionPageProps, IQuestionPageStat
     }
 
     /**
+     * Get replies.
+     */
+     getRepliesAsync = async () => {
+        let response = await getRepliesByQuestionIdAsync(this.params.questionId!);
+       this.setState({
+           replies: response!,
+       })
+   }
+
+    /**
      * Gets the question header.
      */
      getQuestionPageHeader = () => {
         return <div className="question-page-header">
             <Text content={this.state.questionDetail.questionTitle} className="question-title" />
+            <SubjectHeader subjectId={this.state.questionDetail.subjectId} subSubjectId={this.state.questionDetail.subSubjectId === undefined ? "" : this.state.questionDetail.subSubjectId}/>
         </div>
     }
 
@@ -127,6 +148,22 @@ class QuestionPage extends React.Component<IQuestionPageProps, IQuestionPageStat
         })
     }
 
+    onReplySubmit = (answerId: string) => {
+        let answers = this.state.answersDetails;
+        let answer = answers.find((answer: IAnswer)=> answer.answerId === answerId)!;
+        let index = answers.indexOf(answer);
+        answer.isReplyClicked = !answer.isReplyClicked;
+
+        answers[index] = answer;
+        this.setState({
+            answersDetails: answers,
+        });
+        this.getRepliesAsync();
+    }
+
+    /**
+     * Post answer to the queston.
+     */
     onPostClick = async () => {
         let answerDetail: IAnswer = {
             userId: Guid.create().toString(),
@@ -135,12 +172,22 @@ class QuestionPage extends React.Component<IQuestionPageProps, IQuestionPageStat
             answerTitle: "",
             questionId: this.params.questionId!,
             isEditClicked: false,
+            isReplyClicked: false
         };
+        let answers = this.state.answersDetails;
+        answers.push(answerDetail);
+        this.setState({
+            answersDetails: answers,
+        });
 
         await addAnswerAsync(answerDetail);
-        await this.getAnswersAsync();
+        // await this.getAnswersAsync();
     }
 
+    /**
+     * Open editor for answer.
+     * @param answerId Answer Id of which answer to edit.
+     */
     onEditClick = (answerId: string) => {
         let answers = this.state.answersDetails;
         let answer = answers.find((answer: IAnswer)=> answer.answerId === answerId)!;
@@ -153,6 +200,42 @@ class QuestionPage extends React.Component<IQuestionPageProps, IQuestionPageStat
         });
     }
 
+    /**
+     * Get replies for an answer.
+     * @param answerId Answer Id.
+     */
+     getRepliesToTheAnswer = (answerId: string) => {
+        let replies = this.state.replies.filter((reply: IReply)=> reply.answerId === answerId);
+        return replies.map((reply: IReply) => <Stack>
+            <Divider width="80%" height="0.08rem" marginTop="1rem" marginBottom="1rem"/>
+            <Stack className="answer-reply-container">
+                <Text content={reply.replyText} className="answer-reply"/>
+                <Stack horizontal reversed>
+                    <Text content={"10 May 2021"} className="answer-reply"/>
+                    <Text content={"Hunaid Hanfee"} className="answer-reply"/>
+                </Stack>
+        </Stack></Stack>);
+    }
+
+    /**
+     * Open editor for reply.
+     * @param answerId Answer Id of which answer to edit.
+     */
+     onReplyClick = (answerId: string) => {
+        let answers = this.state.answersDetails;
+        let answer = answers.find((answer: IAnswer)=> answer.answerId === answerId)!;
+        let index = answers.indexOf(answer);
+        answer.isReplyClicked = !answer.isReplyClicked;
+
+        answers[index] = answer;
+        this.setState({
+            answersDetails: answers,
+        });
+    }
+
+    /**
+     * Updates the answer.
+     */
     updateAnswer = () => {
         let answers = this.state.answersDetails;
         let answer = answers.find((answer: IAnswer)=> answer.isEditClicked)!;
@@ -166,6 +249,9 @@ class QuestionPage extends React.Component<IQuestionPageProps, IQuestionPageStat
         })
     }
 
+    /**
+     * Handle when user change text editor.
+     */
     handleEditAnswer = (content: string) => {
         this.setState({
             editedAnswer: content,
@@ -173,31 +259,58 @@ class QuestionPage extends React.Component<IQuestionPageProps, IQuestionPageStat
     }
 
     /**
+     * Delete the answer.
+     */
+     deleteAnswer = () => {
+        let answers = this.state.answersDetails;
+        let answer = answers.find((answer: IAnswer)=> answer.isEditClicked)!;
+        let index = answers.indexOf(answer);
+        answers.splice(index, 1);
+        this.setState({
+            answersDetails: answers,
+        })
+    }
+
+    /**
      * Gets the question content.
      */
     getQuestionContent = () => {
         let isEditDisabled = this.state.answersDetails.filter((answer: IAnswer) => answer.isEditClicked);
-        return <Stack>
-            {this.state.answersDetails.map((answerDetail: IAnswer, index: number) => {
-                return <Stack>                    
-                        <Divider width="75%" height="0.08rem" marginTop="1rem" marginBottom="1rem"/>
-                        <Stack horizontal verticalAlign="center">
-                            <Stack className="answer-title-container" >
-                                <Text content={answerDetail.answerTitle} className="answer-title"/>
+        return <Stack >
+            <Stack className="answers-container">
+                {this.state.answersDetails.map((answerDetail: IAnswer, index: number) => {
+                    return <Stack>                    
+                            <Divider width="75%" height="0.08rem" marginTop="1rem" marginBottom="1rem"/>
+                            <Stack horizontal verticalAlign="center">
+                                <Stack className="answer-title-container" >
+                                    <Stack horizontal verticalAlign="center">
+                                        <Avatar className="answer-title">HH</Avatar>
+                                        <Stack>
+                                            <Text content="Hunaid Hanfee" className="user-info"/>
+                                            <Text content="25 Mar 1998" className="user-info"/>
+                                        </Stack>
+                                    </Stack>
+                                </Stack>
+                                <Stack horizontal verticalAlign="center" horizontalAlign="center">
+                                    <Stack onClick={() => {this.onEditClick(answerDetail.answerId)}} className="answer-option" verticalAlign="center" horizontalAlign="center">
+                                        <EditTwoToneIcon fontSize="small"/>
+                                    </Stack>
+                                    <Stack onClick={this.deleteAnswer} className="answer-option" verticalAlign="center" horizontalAlign="center">
+                                        <DeleteTwoToneIcon fontSize="small"/>
+                                    </Stack>
+                                    <Stack onClick={() => {this.onReplyClick(answerDetail.answerId)}} className="answer-option" verticalAlign="center" horizontalAlign="center">
+                                        <ReplyRoundedIcon fontSize="small"/>
+                                    </Stack>
+                                </Stack>
                             </Stack>
-                            <Stack horizontal verticalAlign="center" className="edit-option">
-                                <Button disabled={isEditDisabled.length > 0} onClick={() => {this.onEditClick(answerDetail.answerId)}} variant="contained" className="edit-option">
-                                    <EditTwoToneIcon fontSize="default" className="edit-icon"/>
-                                    <Text content="Edit" className="edit-text"/>
-                                </Button>
-                            </Stack>
-                        </Stack>
-                    <Text content="Explanation:" className="explanation-text"/>                    
-                    <span dangerouslySetInnerHTML={{__html: answerDetail.answerDescription.trim()}} className="answer-description"></span>
-                    {answerDetail.isEditClicked && <EditButton answer={answerDetail} updateAnswer={this.updateAnswer} handleEditAnswer={this.handleEditAnswer}/>}
-                </Stack>
-                
-            })}
+                        <Text content="Explanation:" className="explanation-text"/>                    
+                        <span dangerouslySetInnerHTML={{__html: answerDetail.answerDescription.trim()}} className="answer-description"></span>
+                        {this.getRepliesToTheAnswer(answerDetail.answerId)}
+                        {answerDetail.isEditClicked && <EditTextArea answer={answerDetail} updateAnswer={this.updateAnswer} handleEditAnswer={this.handleEditAnswer}/>}
+                        {answerDetail.isReplyClicked && <ReplyComp userId="a" questionId={answerDetail.questionId} answerId={answerDetail.answerId} onReplySubmit={this.onReplySubmit}/>}
+                    </Stack>
+                })}
+            </Stack>
             <Divider width="75%" height="0.08rem" marginTop="1rem" marginBottom="1rem"/>
             <Text content="New answers should provide a new explanation. Otherwise, edit an answer above." className="answer-note"/>
             {/* <div className="answer-input">
