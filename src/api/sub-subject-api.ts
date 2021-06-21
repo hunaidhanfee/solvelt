@@ -21,7 +21,7 @@ let subSubjects: ISubSubject[] = [
  */
  export const getSubSubject = (subSubjectId: string) => {
      console.log("HEY SUBSUB");
-    return subSubjects.find((sub: ISubSubject) => sub.subjectId === subSubjectId);
+    return subSubjects.find((sub: ISubSubject) => sub.subSubjectId === subSubjectId);
 }
 
 /**
@@ -32,4 +32,12 @@ let subSubjects: ISubSubject[] = [
  export const isSubjectFound = (subSubjectId: string, subjectId: string) => {
     let subSubject = subSubjects.find((sub: ISubSubject) => sub.subSubjectId === subSubjectId)!;
     return subSubject.subjectId === subjectId;
+}
+
+/**
+ * Gets sub-subject details.
+ * @param subjectId Id of subject to get.
+ */
+ export const getTopicsBySubjectId = (subjectId: string) => {
+   return subSubjects.filter((sub: ISubSubject) => sub.subjectId === subjectId);
 }

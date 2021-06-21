@@ -24,10 +24,6 @@
         width: 100%;
     }
 
-    .question-info-container {
-        cursor: pointer;
-    }
-
     .question-item {
         margin-right: 20%;
         max-width: 40rem;
@@ -38,10 +34,15 @@
             font-size: 1.2rem;
             font-weight: 600;
             color: #3e92cc;
+            cursor: pointer;
         }
 
         .question-info {
            color: #bcb7b6;
+        }
+
+        .question-title:hover {
+            text-decoration: underline;
         }
     }
 

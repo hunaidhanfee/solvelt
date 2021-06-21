@@ -92,10 +92,10 @@ class QuestionPage extends React.Component<IQuestionPageProps, IQuestionPageStat
         }
     }
 
-    componentDidMount() {
-        this.getQuestionAsync();
-        this.getAnswersAsync();
-        this.getRepliesAsync();
+    async componentDidMount() {
+        await this.getQuestionAsync();
+        await this.getAnswersAsync();
+        await this.getRepliesAsync();
     }
 
     /**
@@ -132,10 +132,14 @@ class QuestionPage extends React.Component<IQuestionPageProps, IQuestionPageStat
      * Gets the question header.
      */
      getQuestionPageHeader = () => {
-        return <div className="question-page-header">
-            <Text content={this.state.questionDetail.questionTitle} className="question-title" />
-            <SubjectHeader subjectId={this.state.questionDetail.subjectId} subSubjectId={this.state.questionDetail.subSubjectId === undefined ? "" : this.state.questionDetail.subSubjectId}/>
-        </div>
+        if (this.state.questionDetail.subjectId !== "") {
+            return <div className="question-page-header">
+                <Text content={this.state.questionDetail.questionTitle} className="question-title" />
+                <SubjectHeader subjectId={this.state.questionDetail.subjectId} subSubjectId={this.state.questionDetail.subSubjectId === undefined ? "" : this.state.questionDetail.subSubjectId}/>
+            </div>
+        }
+         
+         return <></>;
     }
 
     /**

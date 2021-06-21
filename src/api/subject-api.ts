@@ -5,6 +5,16 @@ let subjects: ISubject[] = [
         subjectDescription: "Physics is all about maths",
         subjectId: "phy",
         subjectName: "Physics"
+    },
+    {
+        subjectDescription: "Physics is all about maths",
+        subjectId: "chem",
+        subjectName: "Chemistry"
+    },
+    {
+        subjectDescription: "Physics is all about maths",
+        subjectId: "math",
+        subjectName: "Math"
     }
 ];
 
@@ -13,6 +23,12 @@ let subjects: ISubject[] = [
  * @param subjectId Id of subject to get.
  */
  export const getSubject = (subjectId: string) => {
-    console.log("HEY SUB");
     return subjects.find((sub: ISubject) => sub.subjectId === subjectId);
+}
+
+/**
+ * Gets subject details.
+ */
+ export const getSubjects = () => {
+    return subjects;
 }

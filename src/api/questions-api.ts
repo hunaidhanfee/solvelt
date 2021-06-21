@@ -57,3 +57,12 @@ let questions: IQuestion[] = [
  export const addQuestionAsync = async (questionDetail: IQuestion) => {
     questions.push(questionDetail);
 }
+
+/**
+ * Gets the list of question.
+ * @param subjectId Id of subject of which question to get.
+ * @returns Question list.
+ */
+export const getQuestionsBySubjectIdAsync = async (subjectId: string) => {
+    return questions.filter((question: IQuestion) => question.subjectId === subjectId);
+}

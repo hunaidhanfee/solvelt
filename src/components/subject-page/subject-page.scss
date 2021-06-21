@@ -1,0 +1,70 @@
+.subject-page {
+    width: 100%;
+    .about-subject-container {
+        width: 70%;
+        max-width: 70%;
+        margin-top: 1rem;
+        margin-left: 4rem;
+
+        .about-subject-header {
+            font-size: 1.5rem;
+            font-weight: 400;
+        }
+
+        .about-subject-text {
+            margin-top: 1rem;
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .question-item {
+            margin-right: 20%;
+            max-width: 40rem;
+            width: 40rem;
+            
+            .question-title {
+                margin-bottom: 0.2rem;
+                font-size: 1.2rem;
+                font-weight: 600;
+                color: #3e92cc;
+                cursor: pointer;
+            }
+    
+            .question-info {
+               color: #bcb7b6;
+            }
+    
+            .question-title:hover {
+                text-decoration: underline;
+            }
+        }
+    
+        .answer-count-container {
+            background-color: #d9d7d6;
+            border-radius: 0.2rem;
+    
+            .answer-count {
+                text-align: center;
+                padding: 0.5rem;
+                color: #8c8a8a;
+    
+                .answer-number {
+                    font-size: 1.4rem;
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+
+    .right-bar {
+        width: 25%;
+        max-width: 25%;
+        .sub-category-list {
+            border-radius: 0.5rem;
+            border: solid #3333;
+            margin-top: 1rem;
+            width: 50%;
+            padding: 0.3rem;
+        }
+    }
+}

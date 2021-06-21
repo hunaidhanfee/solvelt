@@ -110,9 +110,9 @@ class Home extends React.Component<IHomeProps, IHomeState> {
     renderQuestionList = () => {
         return this.state.questionsList.map((question: IQuestion, index: number) => 
             <div >
-                <Stack horizontal tokens={horizontalGapStackTokens} verticalAlign="center" className="question-info-container" onClick={() => this.onQuestionItemClick(question.questionId)}>
+                <Stack horizontal tokens={horizontalGapStackTokens} verticalAlign="center" className="question-info-container" >
                     <Stack className="question-item">
-                        <Text className="question-title" content={question.questionTitle} />
+                        <Text className="question-title" content={question.questionTitle} onClick={() => this.onQuestionItemClick(question.questionId)}/>
                         <span className="question-info" dangerouslySetInnerHTML={{__html: question.questionDescription}}></span>
                     </Stack>
 

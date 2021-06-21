@@ -40,19 +40,18 @@ interface ISubjectHeaderProps {
     }
 
     componentWillMount() {
-         console.log("SUBJEXT ID " + this.props.subjectId);
         this.getSubjectDetail();
         this.getSubSubjectDetail();
     }
 
-    getSubjectDetail = async () => {
-        let response =  getSubject(this.props.subjectId);
+    getSubjectDetail = () => {
+        let response = getSubject(this.props.subjectId);
         this.setState({
             subject: response!,
         })
     }
 
-    getSubSubjectDetail = async () => {
+    getSubSubjectDetail = () => {
         if (this.props.subSubjectId !== ""){
             let response =  getSubSubject(this.props.subSubjectId);
             this.setState({
@@ -64,10 +63,10 @@ interface ISubjectHeaderProps {
     renderSubjectHeader = () => {
         return <Stack horizontal verticalAlign="center" className="subject-header-container">
             <Text content={this.state.subject.subjectName} className="subject-title"/>
-            {this.props.subSubjectId.trim() === "" ? <></> : isSubjectFound(this.props.subSubjectId, this.props.subjectId) && <Stack horizontal verticalAlign="center">
+            {this.props.subSubjectId === "" ? <></> : (isSubjectFound(this.props.subSubjectId, this.props.subjectId) && <Stack horizontal verticalAlign="center">
                     <ArrowForwardIosRoundedIcon fontSize="small" className="subject-separator"/>
-                    <Text content={this.state.subject.subjectName} className="sub-subject-title"/>
-                </Stack>
+                    <Text content={this.state.subSubject.subSubjectName} className="sub-subject-title"/>
+                </Stack>)
             }
         </Stack>
     };
