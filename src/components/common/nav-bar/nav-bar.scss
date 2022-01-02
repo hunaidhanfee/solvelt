@@ -1,0 +1,18 @@
+.nav-bar {
+    background-color: #399e5a;
+    margin-bottom: 1rem;
+
+    .nav-bar-action{
+        color: white;
+        background-color: #3e92cc00;
+        text-align: center;
+        width: 5rem;
+        height: 3rem;
+        transition: 0.1s ease-in-out;
+    }
+
+    .nav-bar-action:hover{
+        cursor: pointer;
+        font-size: 1.05rem !important;
+    }
+}
